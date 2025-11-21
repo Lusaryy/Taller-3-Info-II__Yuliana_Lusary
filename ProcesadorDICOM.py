@@ -53,6 +53,13 @@ class ProcesadorDICOM:
     def crear_dataframe(self):
         metadatos = self.extraer_metadatos()
         self.dataframe = pd.DataFrame(metadatos)
+
+        orden = [
+    "ID del paciente", "Nombre del paciente", "ID único del estudio",
+    "Fecha del estudio", "Descripción del estudio", "Modalidad de la imagen",
+    "Filas", "Columnas"]
+
+        self.dataframe = self.dataframe[orden]
         return self.dataframe
 
 
@@ -75,13 +82,16 @@ class ProcesadorDICOM:
         self.dataframe["IntensidadPromedio"] = intensidades
         return self.dataframe
 
-if __name__=="main":
+if __name__=="__main__":
 
     RUTA_DICOM = input("Ingresa la ruta de la carpeta con archivos DICOM o enter para usar predeterminada: ").strip ()
 
     if not RUTA_DICOM:
         RUTA_DICOM ="./data"
         print(f"No se Ingreso ruta. usando ruta por defecto {RUTA_DICOM}\n")
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.width', 120)
+    pd.set_option('display.colheader_justify', 'center')
 
     try:
         procesador = ProcesadorDICOM(RUTA_DICOM)
@@ -99,3 +109,4 @@ if __name__=="main":
 
     except Exception as e:
         print(f"Error inesperado:{e}")
+
